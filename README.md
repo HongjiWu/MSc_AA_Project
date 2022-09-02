@@ -3,7 +3,7 @@ repo for master project: Assessing the Practical Risks of Text Authorship Attrib
 
 All Dataset should be stored in /data folder, however, since the size of it exceed github limit
 you would need to download it in the following drive:
-
+https://drive.google.com/file/d/1VLIqKFwmXyy3_L-9ScmxLI-RGBxGrwdj/view?usp=sharing
 
 
 
