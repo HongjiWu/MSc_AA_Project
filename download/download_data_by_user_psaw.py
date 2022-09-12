@@ -4,7 +4,7 @@ import json
 import requests
 from tqdm import tqdm
 import pandas as pd
-from psaw import PushshiftAPI
+
 
 import logging
 from datetime import datetime
@@ -25,7 +25,7 @@ class UserDownloader:
         self.timestamp_min = timestamp_min
         self.timestamp_max = timestamp_max
         self.subreddit_blacklist = [self.subreddit]
-        self.api = PushshiftAPI()
+
         
         logging.basicConfig(level = logging.INFO)
 
@@ -44,22 +44,7 @@ class UserDownloader:
         is small compared to the API request time."""
 
         user_list = sorted(list(set(user_list) - set(self.processed)), reverse=True)
-        '''
-        print(user_list[0])
-        res = self.api.search_comments(after = self.timestamp_min,
-                before = self.timestamp_max,
-                author = user_list[0],
-                filter = ['selftext']
-                
-                
-                
-                
-                )
 
-        print(list(res))
-        
-
-        '''
         for user in tqdm(user_list):
             logging.info(user)
             logging.info(datetime.now())
@@ -78,7 +63,7 @@ class UserDownloader:
     def request_user(self, author_name: str, cur_max) -> Optional[Dict]:
 
         request_url = f"https://api.pushshift.io/reddit/search/comment/?author={author_name}&sort=asc&after={cur_max}&before={self.timestamp_max}&size={500}"
-        #request_url = f"https://api.pushshift.io/reddit/search/comment/?author={author_name}&sort=desc&score=>{self.min_score}&after={self.timestamp_max}"
+
 
         for _ in range(self.max_tries):
             try:
