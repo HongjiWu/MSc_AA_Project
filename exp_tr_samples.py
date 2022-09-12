@@ -5,18 +5,21 @@ from authorship_attribution.experiments import BaseExperiment, ExperimentParams,
 from authorship_attribution.methods.sari.model_training import TrainingArgs
 
 from scripts.method_list import get_methods
-from pathlib import Path
+
 import logging
 from datetime import datetime
 
-import tracemalloc
+
 load_dotenv()
-import resource
-#data_path = str(Path(__file__).rewolver().parent[1]) + '/data'
-#resource.setrlimit(resource.RLIMIT_AS, (10000000000,resource.RLIM_INFINITY))
+
+# This script is designed for running experiment 1: Varying Number of Training Samples
+# You could choose which dataset you want to use, and specify the parameter setting of aa_methods here.
+
 data_path = 'data/'
 anchor = 'todayilearned'
+
 logging.basicConfig(level = logging.INFO)
+
 args = TrainingArgs(train_epochs=100,
                     batch_size=5,
                     # from_pretrained="pretrained_embeddings.pth",
@@ -33,51 +36,31 @@ params = ExperimentParams(eli5_path=data_path + "processed_" + anchor + ".csv",
                           open_world=False,
                           compute_train_accuracy=True,
                           output_file=data_path + "experiments_tr_sample_num_" + anchor + "_tr_samples.csv")
-                          #output_file = data_path + "test_new_bert" + anchor + "_tr_samples.csv")
 
 
+# The method list is written in /script/method_list.py
+# You could choose which method you like to test in that script
 method_list = get_methods(args)
+
 data = pd.read_csv(params.subreddits_path, usecols = ["user"])
 users = list(data.user.unique())
 last_user_pool = []
-print(users)
-print(len(users))
+
 for method in method_list:
     logging.info(method.name)
-    #for num in [2, 5, 10, 15, 20, 30, 40, 50, 65, 80, 100]:
-    for num in [65, 80, 100] :
+    # You could specify how many training samples you want each candidate to have in each iteration here
+    for num in [2, 5, 10, 15, 20, 30, 40, 50, 65, 80, 100]:
+
         try:
             logging.info(datetime.now())
             for i in range(1):
-                
-                #tracemalloc.start()
                 
 
                 params.min_samples_per_author = num
                 exp_intra = BaselineExperiment(params, method, author_pool = users)
                 exp_intra.experiment_run(repeats= 5 , num_authors = 100)
                 
-                #snapshot = tracemalloc.take_snapshot()
-                #top_stats = snapshot.statistics("lineno")
 
-                #for stat in top_stats[:10]:
-                    #logging.info(str(stat))
-
-                '''
-                author_pool = exp_intra.author_pool
-                
-                logging.info(author_pool)
-                logging.info("difference in author with last exp:")
-                logging.info(list(set(author_pool)- set(last_user_pool)))
-
-
-                exp_cross = CrossRedditExperiment(params, method, author_pool = author_pool)
-                exp_cross.experiment_run(repeats=1 , num_authors = 100)
-                logging.info(exp_cross.author_pool)
-                logging.info("difference in author")
-                logging.info(list(set(author_pool)- set(exp_cross.author_pool)))
-                last_user_pool = exp_cross.author_pool
-                '''
         except Exception as exception:
             logging.info(exception)
         
