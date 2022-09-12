@@ -22,7 +22,7 @@ downloader = ConvokitDownloader(path = os.path.join(download('subreddit-' + subr
 downloader.construct_df()
 
 
-DataProcessor(data_path = DATA_PATH + "comments_" + subreddit_name + ".csv", output_path = DATA_PATH + "processed_" + subreddit_name + "_100.csv", is_eli5 = True).process()
+DataProcessor(data_path = DATA_PATH + "comments_" + subreddit_name + ".csv", output_path = DATA_PATH + "processed_" + subreddit_name + ".csv", is_eli5 = True).process()
 
 # In this part, we select qualified user who have at least n+1 anchor data samples
 
@@ -65,7 +65,7 @@ print(num_Of_Users)
 print(user_set)
 # Name of users who have at least n+1 anchor samples will be printed
 df_user = pd.DataFrame(user_set, columns = ['user'])
-df_user.to_csv(DATA_PATH + subreddit_name + "_" + min_sample +"_user.csv")
+df_user.to_csv(DATA_PATH + subreddit_name + "_" + str(min_sample) +"_user.csv")
 
 # Record the first and last comment we collect in anchor data samples
 # In order to control the time span of auxiliary data samples
@@ -77,9 +77,9 @@ max_time = df_og["timestamp_max"].max()
 
 # In this part, we retrieve comments for each qualified users from other subreddits to form auxiliary data sample
 
-UserDownloader(DATA_PATH + subreddit_name + "_" + min_sample + "_user.csv", DATA_PATH + subreddit_name + "_" + str(min_sample) + "_comments_subs_spe.csv", timestamp_min = min_time, timestamp_max = max_time, subreddit = subreddit_name)
+UserDownloader(DATA_PATH + subreddit_name + "_" + str(min_sample) + "_user.csv", DATA_PATH + subreddit_name + "_" + str(min_sample) + "_comments_subs_spe.csv", timestamp_min = min_time, timestamp_max = max_time, subreddit = subreddit_name)
 
-DataProcessor(DATA_PATH + subreddit_name + "_" + min_sample + "_comments_subs_spe.csv", DATA_PATH + subreddit_name + "_" + min_sample + "_processed_subs_spe.csv", is_eli5 = False).process()
+DataProcessor(DATA_PATH + subreddit_name + "_" + str(min_sample) + "_comments_subs.csv", DATA_PATH + subreddit_name + "_" + str(min_sample) + "_processed_subs.csv", is_eli5 = False).process()
 
 
 
