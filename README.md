@@ -38,7 +38,7 @@ To use the Stanford Parser (optional and very slow):
 
 For downloading dataset, specify the name of your anchor subreddit, and the minimum training sample each candidate needs to have in download_dataset.py
 
-Then run it, this process could take several hours.
+Then run this script, the whole process could take several hours.
 
 ## Running experiments
 
@@ -46,6 +46,10 @@ For running Exp.1 Varying Number of Training Samples, run exp_tr_samples.py
 
 For running Exp.2 Varying Number of Candidate Authors, run exp_author_num.py
 
-For runnning Exp.3 Varying Length of Data Samples, run exp_sample_length.py
+For running Exp.3 Varying Length of Data Samples, run exp_sample_length.py
+
+Before running this experiment, you have to generate dataset with different sample length by using modify_sample_length.py
 
 For running Exp.4 Varying Content Divergence between Referencing and Targetting Data Samples, run exp_sim.py
+
+Before running this expereiment, you have to generate dataset with similarity metrics by using compute_sim.py
