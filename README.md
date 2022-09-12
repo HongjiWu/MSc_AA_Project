@@ -36,7 +36,7 @@ To use the Stanford Parser (optional and very slow):
 ```
 ## Downloading Dataset
 
-For downloading dataset, specify the name of your anchor subreddit, and the minimum training sample each candidate needs to have in download_dataset.py
+For downloading dataset, specify the name of your anchor subreddit, and the minimum training sample each candidate needs to have in **download_dataset.py**
 
 Then run this script, the whole process could take several hours.
 
