@@ -53,3 +53,9 @@ Before running this experiment, you have to generate dataset with different samp
 For running Exp.4 Varying Content Divergence between Referencing and Targetting Data Samples, run **exp_sim.py**
 
 Before running this expereiment, you have to generate dataset with similarity metrics by using **compute_sim.py**
+
+## Plotting
+
+All experiment output is stored in /output
+
+There is two jupyter notebooks used to generate all the plots in report & ppt in /output and all the plots already generated is in /output/fig
