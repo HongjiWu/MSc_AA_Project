@@ -15,6 +15,8 @@ logging.basicConfig(level = logging.INFO)
 load_dotenv()
 
 # This script is used for running hyperparameter tuning
+# You should do the hyperparameter tuning on the LifeProTips dataset, since we already block all comments involved in this dataset
+# away from processing dataset with other anchor_subreddit
 
 anchor = "LifeProTips"
 data_path = 'data/'
@@ -37,29 +39,25 @@ params = ExperimentParams(eli5_path=data_path + "processed_" + anchor + ".csv",
                           domains="tr",
                           open_world=False,
                           compute_train_accuracy = True,
-                          #output_file=data_path + "experiments_tr_sample_num" + anchor + "_tr_samples.csv")
-                          #output_file = data_path + "test_" + anchor + "_tr_samples.csv")
                           output_file = data_path + "hyperparam_tune_" +  anchor + "_KOP.csv")
 
-#batch_size = [16, 25, 64]
+
+# You could modify your hyperparameter set there
+
+
 batch_size = [5]
 
-#batch_size = [100]
-train_epochs = [25, 50, 109] #for kop
-#train_epochs = [100, 150, 200]
-#train_epochs = [100, 150]
-#embedding_dim = [100,256, 518] #for SAR
+
+train_epochs = [25, 50, 109]
+
+
 embedding_dim = [518]
-#embedding_dim = [300] # for SHR
-#embedding_dim = [128]
-#drop_out = [0.25, 0.5, 0.75]
+
 drop_out = [0.25]
-#learning_rate = [0.001, 0.01, 0.005] #this is for SAR, SAR2
-#learning_rate = [0.001]
-#learning_rate = [0.0005, 0.0001, 0.001]
-learning_rate = [0.3, 0.4, 0.5, 0.7] #this is for kop
+
+learning_rate = [0.3, 0.4, 0.5, 0.7]
 pad_length = [1000]
-#pad_length = [140, 512, 1024, 2048] # for SHR
+
 for bs, te, ed, lr, pl, do in product(batch_size, train_epochs, embedding_dim, learning_rate, pad_length, drop_out):
     logging.info(str([bs, te, ed, lr, pl, do]))
     args.batch_size = bs
