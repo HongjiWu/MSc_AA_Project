@@ -34,6 +34,11 @@ To use the Stanford Parser (optional and very slow):
  export STANFORDTOOLSDIR=$HOME
  export CLASSPATH=$STANFORDTOOLSDIR/stanford-parser-full-2015-12-09/stanford-parser.jar:$STANFORDTOOLSDIR/stanford-parser-full-2015-12-09/stanford-parser-3.6.0-models.jar
 ```
+## Downloading Dataset
+
+For downloading dataset, specify the name of your anchor subreddit, and the minimum training sample each candidate needs to have in download_dataset.py
+
+Then run it, this process could take several hours.
 
 ## Running experiments
 
