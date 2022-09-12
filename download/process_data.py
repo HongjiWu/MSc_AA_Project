@@ -10,14 +10,15 @@ tqdm.pandas()
 
 
 class DataProcessor:
-    def __init__(self, data_path: str, output_path: str, is_eli5: bool):
+    def __init__(self, data_path: str, output_path: str, is_eli5: bool, sl = 250):
         self.data_path = data_path
         self.output_path = output_path
         self.is_eli5 = is_eli5
+        self.sl = sl
 
     def process(self):
         logging.info(f"Reading data from {self.data_path}")
-        print(1)
+
         if self.is_eli5:
             df_og = pd.read_csv(self.data_path, usecols=["id", "user", "text", "timestamp"],
                                 dtype={"id": "str", "user": "str", "text": "str"}).dropna().drop_duplicates()
@@ -29,7 +30,8 @@ class DataProcessor:
             df_og = df_og[df_og.subreddit != "explainlikeimfive"]
 
             df_og = df_og[df_og.subreddit != 'LifeProTips']
-        print(2)
+
+
         df_lpt = pd.read_csv('data/LifeProTips_20_comments_subs.csv', usecols=["id", "user", "text", "timestamp"],
                                 dtype={"id": "str", "user": "str", "text": "str"}, lineterminator = '\n').dropna().drop_duplicates()
         lpt_aux_ids = set(df_lpt['id'])
@@ -41,26 +43,26 @@ class DataProcessor:
         url_regex = re.compile(
             r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)")
         hashtag_at_regex = re.compile(r"(#|@|r\/|u\/)\w+")
-        print(3)
+
         logging.info("Filtering for URLs and social media handles or usernames")
         df_og.text = df_og.text.progress_apply(lambda x: re.sub(url_regex, "", x))
         df_og.text = df_og.text.progress_apply(lambda x: re.sub(hashtag_at_regex, "", x))
 
         logging.info("Grouping texts by samples of 250 words")
-        print(4)
+
         if self.is_eli5:
             merged = df_og.groupby('user').apply(self.group_)
         else:
             df_og["words"] = df_og["text"].apply(lambda x: len(x.split()))
             # speed-dup
-            df = df_og.groupby(["subreddit", "user"]).filter(lambda x: x['words'].sum() >= 250)
+            df = df_og.groupby(["subreddit", "user"]).filter(lambda x: x['words'].sum() >= self.sl)
             merged = df.groupby(['user', 'subreddit']).apply(self.group_)
-        print(5)
+
         df, _ = self.expand(merged)
         df = df.reset_index().drop(["index"], axis=1)
         df["id"] = [str(uuid4()) for _ in range(len(df))]
         logging.info(f"Saving processed data to {self.output_path}")
-        print(6)
+
         df.to_csv(self.output_path)
 
     def group_(self, x):
@@ -68,7 +70,7 @@ class DataProcessor:
         tmp_dic['user'] = x['user'].iloc[0]
 
         tmp_dic['text'], tmp_dic['timestamp_min'], tmp_dic['timestamp_max'], tmp_dic["id"] = self.group_texts(
-            zip(x["text"], x["timestamp"], x["id"]))
+            zip(x["text"], x["timestamp"], x["id"]), n_words= self.sl)
 
         if self.is_eli5:
             return pd.Series(tmp_dic, index=['id', 'user', 'text', 'timestamp_min', 'timestamp_max'])
