@@ -19,6 +19,11 @@ import logging
 logging.basicConfig(level = logging.INFO)
 load_dotenv()
 
+# This script is design for running Exp.4
+# The experiment on Varying Content Divergence between Referencing and Targetting Data Samples
+# You could choose which dataset you want to use, and specify the parameter setting of aa_methods here.
+# For running this experiment, you have to generate dataset with similarity metrics by using compute_sim.py
+
 
 data_path = 'data/'
 anchor = 'eli5'
@@ -81,7 +86,8 @@ methods.append(ShresthaMethod(pad_length=2048, training_args=args_SHR,learning_r
 methods.append(SariMethod(pad_length=1000, training_args=args_SAR, split_words=True))
 methods.append(BertMethod(pad_length=512, training_args=args_BERT))
 methods.append(NarMethod())
-for method in methods: 
+
+for method in methods:
     exp = SimExperiment(params, method)
 
 

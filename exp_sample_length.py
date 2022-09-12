@@ -19,7 +19,7 @@ load_dotenv()
 # This script is design for running Exp.3
 # The experiment on Varying Length of Data Samples
 # You could choose which dataset you want to use, and specify the parameter setting of aa_methods here.
-# For running this experiment, you have to download
+# For running this experiment, you have to generate dataset with different sample length by using modify_sample_length.py
 
 data_path = 'data/'
 anchor = 'eli5'
