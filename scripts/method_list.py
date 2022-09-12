@@ -15,6 +15,6 @@ def get_methods(args=None):
                    #TripletSaediMethod(pad_length=1000, training_args=args),
                    #BertMethod(pad_length=512, training_args=args),
                    #BertHybridMethod(pad_length  = 512, training_args = args),
-                   #BertHybridMethod(pad_length = 512, training_args = args)
+
                    ]
     return method_list

@@ -77,7 +77,7 @@ max_time = df_og["timestamp_max"].max()
 
 # In this part, we retrieve comments for each qualified users from other subreddits to form auxiliary data sample
 
-UserDownloader(DATA_PATH + subreddit_name + "_" + min_sample + "_user.csv", DATA_PATH + subreddit_name + "_" + min_sample + "_comments_subs_spe.csv", timestamp_min = min_time, timestamp_max = max_time, subreddit = subreddit_name)
+UserDownloader(DATA_PATH + subreddit_name + "_" + min_sample + "_user.csv", DATA_PATH + subreddit_name + "_" + str(min_sample) + "_comments_subs_spe.csv", timestamp_min = min_time, timestamp_max = max_time, subreddit = subreddit_name)
 
 DataProcessor(DATA_PATH + subreddit_name + "_" + min_sample + "_comments_subs_spe.csv", DATA_PATH + subreddit_name + "_" + min_sample + "_processed_subs_spe.csv", is_eli5 = False).process()
 
